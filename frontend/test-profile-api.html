@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Profile API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Profile API Response</h1>
+
+    <div class="section">
+        <h2>1. Raw API Response</h2>
+        <pre id="raw-response">Loading...</pre>
+    </div>
+
+    <div class="section">
+        <h2>2. Parsed Profile Data</h2>
+        <pre id="parsed-profile">Loading...</pre>
+    </div>
+
+    <div class="section">
+        <h2>3. Mass Schedule</h2>
+        <pre id="mass-schedule">Loading...</pre>
+    </div>
+
+    <div class="section">
+        <h2>4. Social Media</h2>
+        <pre id="social-media">Loading...</pre>
+    </div>
+
+    <div class="section">
+        <h2>5. Test Summary</h2>
+        <div id="summary">Loading...</div>
+    </div>
+
+    <script>
+        async function testProfileAPI() {
+            const API_URL = 'http://localhost:5000/api';
+
+            try {
+                // 1. Fetch raw response
+                const response = await fetch(`${API_URL}/profile`);
+                const rawData = await response.json();
+                document.getElementById('raw-response').textContent = JSON.stringify(rawData, null, 2);
+
+                // 2. Parse profile (mimicking api.js logic)
+                const profile = Array.isArray(rawData.data) && rawData.data.length > 0
+                    ? rawData.data[0]
+                    : null;
+
+                document.getElementById('parsed-profile').textContent = JSON.stringify({
+                    stasiName: profile?.stasiName,
+                    parokiName: profile?.parokiName,
+                    logo: profile?.logo,
+                    address: profile?.address,
+                    phone1: profile?.phone1,
+                    phone2: profile?.phone2,
+                    phone3: profile?.phone3,
+                    email: profile?.email
+                }, null, 2);
+
+                // 3. Parse massSchedule
+                let massSchedule = null;
+                if (profile && profile.massSchedule && typeof profile.massSchedule === 'string') {
+                    try {
+                        let parsed = JSON.parse(profile.massSchedule);
+                        if (typeof parsed === 'string') {
+                            parsed = JSON.parse(parsed);
+                        }
+                        massSchedule = parsed;
+                    } catch (e) {
+                        massSchedule = { error: e.message };
+                    }
+                }
+                document.getElementById('mass-schedule').textContent = JSON.stringify(massSchedule, null, 2);
+
+                // 4. Parse socialMedia
+                let socialMedia = null;
+                if (profile && profile.socialMedia && typeof profile.socialMedia === 'string') {
+                    try {
+                        let parsed = JSON.parse(profile.socialMedia);
+                        if (typeof parsed === 'string') {
+                            parsed = JSON.parse(parsed);
+                        }
+                        socialMedia = parsed;
+                    } catch (e) {
+                        socialMedia = { error: e.message };
+                    }
+                }
+                document.getElementById('social-media').textContent = JSON.stringify(socialMedia, null, 2);
+
+                // 5. Summary
+                const summary = document.getElementById('summary');
+                let html = '<ul>';
+                html += `<li class="${profile ? 'success' : 'error'}">Profile Data: ${profile ? 'Found ✓' : 'Not Found ✗'}</li>`;
+                html += `<li class="${profile?.stasiName ? 'success' : 'error'}">Stasi Name: ${profile?.stasiName || 'Missing'}</li>`;
+                html += `<li class="${profile?.parokiName ? 'success' : 'error'}">Paroki Name: ${profile?.parokiName || 'Missing'}</li>`;
+                html += `<li class="${profile?.phone1 ? 'success' : 'error'}">Phone1: ${profile?.phone1 || 'Missing'}</li>`;
+                html += `<li class="${profile?.phone2 ? 'success' : 'error'}">Phone2: ${profile?.phone2 || 'Missing'}</li>`;
+                html += `<li class="${profile?.email ? 'success' : 'error'}">Email: ${profile?.email || 'Missing'}</li>`;
+                html += `<li class="${massSchedule && Array.isArray(massSchedule) ? 'success' : 'error'}">Mass Schedule: ${massSchedule && Array.isArray(massSchedule) ? massSchedule.length + ' items ✓' : 'Error or Missing'}</li>`;
+                html += `<li class="${socialMedia && typeof socialMedia === 'object' ? 'success' : 'error'}">Social Media: ${socialMedia && typeof socialMedia === 'object' ? 'Parsed ✓' : 'Error or Missing'}</li>`;
+                html += '</ul>';
+                summary.innerHTML = html;
+
+            } catch (error) {
+                document.getElementById('summary').innerHTML = `<p class="error">ERROR: ${error.message}</p>`;
+                console.error('Test failed:', error);
+            }
+        }
+
+        testProfileAPI();
+    </script>
+</body>
+</html>

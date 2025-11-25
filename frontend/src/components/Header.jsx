@@ -1,0 +1,158 @@
+import { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown } from 'lucide-react';
+import './Header.css';
+
+const Header = ({ profile, loading }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const dropdownRef = useRef(null);
+  const location = useLocation();
+
+  const menuItems = [
+    { title: 'Beranda', path: '/' },
+    {
+      title: 'Artikel & Formulir',
+      submenu: [
+        { title: 'Artikel', path: '/artikel' },
+        { title: 'Pengumuman', path: '/pengumuman' },
+        { title: 'Galeri Stasi', path: '/galeri' },
+        { title: 'Formulir', path: '/formulir' }
+      ]
+    },
+    {
+      title: 'Tentang Kami',
+      submenu: [
+        { title: 'Sejarah', path: '/sejarah' },
+        { title: 'DPS BGKS/DPP BGKP', path: '/pengurus' },
+        { title: 'Pastor', path: '/pastor' },
+        { title: 'Wilayah & Lingkungan', path: '/wilayah' }
+      ]
+    },
+    { title: 'Kategorial', path: '/kategorial' },
+    { title: 'Karya Sosial', path: '/karya-sosial' }
+  ];
+
+  const toggleDropdown = (index) => {
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
+
+  const handleMouseEnter = (index) => {
+    if (window.innerWidth >= 769) {
+      setActiveDropdown(index);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (window.innerWidth >= 769) {
+      setActiveDropdown(null);
+    }
+  };
+
+  const closeDropdown = () => {
+    setActiveDropdown(null);
+  };
+
+  // Close dropdown when route changes
+  useEffect(() => {
+    setActiveDropdown(null);
+    setIsMenuOpen(false);
+  }, [location]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <header className="header">
+      <div className="header-top">
+        <div className="container">
+          <div className="header-content">
+            <div className="logo-section">
+              {profile?.logo ? (
+                <img src={profile.logo} alt={profile.stasiName} className="logo" />
+              ) : (
+                <img src="/logo.png" alt="Stasi" className="logo" />
+              )}
+              <div className="site-title">
+                <h1>{profile?.stasiName || 'Stasi Yohanes Gabriel Perboyre'}</h1>
+                <p>{profile?.parokiName || 'Paroki Santo Yakobus Kelapa Gading'}</p>
+              </div>
+            </div>
+
+            <nav className="navbar">
+              <button
+                className="mobile-menu-btn"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+
+              <ul className={`nav-menu ${isMenuOpen ? 'active' : ''}`} ref={dropdownRef}>
+            {menuItems.map((item, index) => (
+              <li key={index} className="nav-item">
+                {item.submenu ? (
+                  <div
+                    className="dropdown"
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <button
+                      className="nav-link dropdown-toggle"
+                      onClick={() => toggleDropdown(index)}
+                    >
+                      {item.title}
+                      <ChevronDown size={16} />
+                    </button>
+                    <ul className={`dropdown-menu ${activeDropdown === index ? 'show' : ''}`}>
+                      {item.submenu.map((subitem, subindex) => (
+                        <li key={subindex}>
+                          {subitem.external ? (
+                            <a
+                              href={subitem.path}
+                              className="dropdown-item"
+                              onClick={closeDropdown}
+                            >
+                              {subitem.title}
+                            </a>
+                          ) : (
+                            <Link
+                              to={subitem.path}
+                              className="dropdown-item"
+                              onClick={closeDropdown}
+                            >
+                              {subitem.title}
+                            </Link>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <Link to={item.path} className="nav-link">
+                    {item.title}
+                  </Link>
+                )}
+              </li>
+            ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

@@ -1,0 +1,155 @@
+.formulir-page {
+  min-height: 100vh;
+}
+
+.intro-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.intro-section p {
+  margin: 0;
+  line-height: 1.6;
+  color: #555;
+}
+
+.category-filter {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.25rem;
+  border: 2px solid #1e40af;
+  background: white;
+  color: #1e40af;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover {
+  background: #1e40af;
+  color: white;
+}
+
+.filter-btn.active {
+  background: #1e40af;
+  color: white;
+}
+
+.formulir-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formulir-category {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.category-title {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.formulir-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.formulir-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+}
+
+.formulir-card:last-child {
+  border-bottom: none;
+}
+
+.formulir-card:hover {
+  background: #f9fafb;
+}
+
+.formulir-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.formulir-info p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #1e40af;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.3s;
+}
+
+.download-btn:hover {
+  background: #1e3a8a;
+}
+
+.info-box {
+  background: #eff6ff;
+  border-left: 4px solid #1e40af;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.info-box h3 {
+  margin-top: 0;
+  color: #1e40af;
+}
+
+.info-box ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+
+.info-box li {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .formulir-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .download-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

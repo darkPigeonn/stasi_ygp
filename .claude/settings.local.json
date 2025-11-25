@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SHOW TABLES LIKE ''%jadwal%'';\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT id, stasi_name, mass_schedule FROM profiles;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT id, name, description, fileUrl FROM formulirs WHERE isActive = 1 LIMIT 4;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; ALTER TABLE formulirs ADD COLUMN bookmark VARCHAR(100) AFTER name COMMENT ''Bookmark/icon identifier for display'';\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; ALTER TABLE formulirs ADD COLUMN bookmark VARCHAR(100) AFTER name;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\":*)",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT COUNT(*) as total FROM formulirs WHERE isActive = 1;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; UPDATE formulirs SET isActive = 0 WHERE id > 4;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; UPDATE formulirs SET isActive = 1;\")",
+      "Bash(npm install:*)",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; ALTER TABLE formulirs ADD COLUMN status ENUM(''draft'', ''published'') DEFAULT ''draft'' AFTER bookmark;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; UPDATE formulirs SET status = ''published'' WHERE id <= 4;\")",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT id, name, bookmark, status, isActive FROM formulirs ORDER BY id LIMIT 8;\")",
+      "Bash(curl:*)",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT id, name, bookmark, status, isActive FROM formulirs WHERE status = ''published'' AND isActive = 1 LIMIT 4;\")",
+      "Bash(npm run dev:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(\"c:\\xampp\\mysql\\bin\\mysql.exe\" -u root -e \"USE stasi_yohanes; SELECT id, name, status FROM formulirs WHERE isActive = 1 ORDER BY id;\")",
+      "Bash(python -m json.tool:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
