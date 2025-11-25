@@ -25,6 +25,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Mount routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/users', require('./routes/user'));
 app.use('/api', require('./routes/crud'));
 app.use('/api/liturgy', require('./routes/liturgy'));
 
