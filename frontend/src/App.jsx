@@ -33,6 +33,7 @@ import Galeri from './pages/Galeri';
 import PKKS from './pages/PKKS';
 import Katekumen from './pages/Katekumen';
 import ProfileEdit from './pages/admin/ProfileEdit';
+import UserAdmin from './pages/admin/UserAdmin';
 import './App.css';
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<ProfileEdit />} />
+            <Route path="users" element={<UserAdmin />} />
             <Route path="slider" element={<SliderAdmin />} />
             <Route path="artikel" element={<ArtikelAdmin />} />
             <Route path="pengumuman" element={<PengumumanAdmin />} />

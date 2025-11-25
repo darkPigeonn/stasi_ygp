@@ -17,6 +17,7 @@ const AdminLayout = () => {
   const menuItems = [
     { path: '/admin', label: 'Dashboard', icon: '🏠' },
     { path: '/admin/profile', label: 'Profile Stasi', icon: '⚙️' },
+    { path: '/admin/users', label: 'User Management', icon: '👤' },
     { path: '/admin/slider', label: 'Slider', icon: '🎬' },
     { path: '/admin/artikel', label: 'Artikel', icon: '📝' },
     { path: '/admin/pengumuman', label: 'Pengumuman', icon: '📢' },
