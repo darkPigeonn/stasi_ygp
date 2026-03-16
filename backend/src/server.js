@@ -14,12 +14,20 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', process.env.FRONTEND_URL].filter(Boolean),
+  origin: ['http://localhost:4173', 'https://stasiygp.imavi.org', process.env.FRONTEND_URL, /\.vercel\.app$/].filter(Boolean),
   credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// 1. Tambahkan trust proxy jika dideploy ke VPS/Cloud (Nginx, Heroku, dsb)
+app.set('trust proxy', true);
 
+// 2. Middleware Logger untuk mencatat IP
+app.use((req, res, next) => {
+  const visitorIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  console.log(`[${new Date().toLocaleString()}] Access from IP: ${visitorIp} | Method: ${req.method} | URL: ${req.url}`);
+  next();
+});
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 

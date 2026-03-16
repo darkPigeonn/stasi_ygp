@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import './Header.css';
+import { getImageUrl } from '../utils/imagePlaceholder';
 
 const Header = ({ profile, loading }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -80,7 +81,7 @@ const Header = ({ profile, loading }) => {
           <div className="header-content">
             <div className="logo-section">
               {profile?.logo ? (
-                <img src={profile.logo} alt={profile.stasiName} className="logo" />
+                <img src={getImageUrl(profile.logo)} alt={profile.stasiName} className="logo" />
               ) : (
                 <img src="/logo.png" alt="Stasi" className="logo" />
               )}

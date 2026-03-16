@@ -13,8 +13,13 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
+	'/api': {
+      target: 'https://parokia.imavi.org/api',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, '')
+    },
       '/uploads': {
-        target: 'http://localhost:5000',
+        target: 'https://parokia.imavi.org',
         changeOrigin: true,
       }
     }
