@@ -2,11 +2,8 @@ import { useState, useEffect } from 'react';
 import { sliderAPI } from '../../services/api';
 import { Plus, Edit2, Trash2, Image as ImageIcon, ArrowUp, ArrowDown, Eye, EyeOff } from 'lucide-react';
 import './AdminForms.css';
-import { useAuth } from '../../context/AuthContext';
 
 const SliderAdmin = () => {
-  const { isAdmin } = useAuth();
-  const canDelete = isAdmin();
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -72,11 +69,10 @@ const SliderAdmin = () => {
 
     try {
       const submitData = new FormData();
-      // Use FormData.set to avoid duplicate keys (can cause backend parsing like "0,3")
-      submitData.set('title', formData.title);
-      submitData.set('subtitle', formData.subtitle || '');
-      submitData.set('linkUrl', formData.linkUrl || '');
-      submitData.set('isActive', formData.isActive ? '1' : '0');
+      submitData.append('title', formData.title);
+      submitData.append('subtitle', formData.subtitle || '');
+      submitData.append('linkUrl', formData.linkUrl || '');
+      submitData.append('isActive', formData.isActive);
 
       if (formData.image) {
         submitData.append('image', formData.image);
@@ -86,11 +82,11 @@ const SliderAdmin = () => {
       }
 
       if (editingId) {
-        submitData.set('order', String(Number(formData.order) || 0));
+        submitData.append('order', String(formData.order ?? 0));
         await sliderAPI.update(editingId, submitData);
         setMessage({ type: 'success', text: 'Slider berhasil diperbarui' });
       } else {
-        submitData.set('order', String(sliders.length));
+        submitData.append('order', String(sliders.length));
         await sliderAPI.create(submitData);
         setMessage({ type: 'success', text: 'Slider berhasil ditambahkan' });
       }
@@ -118,10 +114,6 @@ const SliderAdmin = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!canDelete) {
-      setMessage({ type: 'error', text: 'Hapus slider hanya bisa dilakukan oleh admin' });
-      return;
-    }
     if (!window.confirm('Apakah Anda yakin ingin menghapus slider ini?')) {
       return;
     }
@@ -132,7 +124,7 @@ const SliderAdmin = () => {
       await fetchSliders();
     } catch (error) {
       console.error('Error deleting slider:', error);
-      setMessage({ type: 'error', text: 'Gagal menghapus slider: ' + error.message });
+      setMessage({ type: 'error', text: 'Gagal menghapus slider: ' + (error?.message || 'Unknown error') });
     }
   };
 
@@ -411,9 +403,7 @@ const SliderAdmin = () => {
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="btn-icon btn-delete"
-                          title={canDelete ? 'Hapus' : 'Hanya admin yang bisa menghapus slider'}
-                          disabled={!canDelete}
-                          style={!canDelete ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
+                          title="Hapus"
                         >
                           <Trash2 size={18} />
                         </button>
