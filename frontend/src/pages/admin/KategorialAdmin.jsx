@@ -5,6 +5,7 @@ import { kategorialAPI } from '../../services/api';
 import { Plus, Edit2, Trash2, Image as ImageIcon } from 'lucide-react';
 import './AdminForms.css';
 import './TiptapEditor.css';
+import { getImageUrl } from '../../utils/imagePlaceholder';
 
 const KategorialAdmin = () => {
   const [kategoriales, setKategoriales] = useState([]);
@@ -341,7 +342,7 @@ const KategorialAdmin = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           {kategorial.image ? (
                             <img
-                              src={`http://localhost:5000${kategorial.image}`}
+                              src={`${getImageUrl(kategorial.image)}`}
                               alt={kategorial.name}
                               style={{
                                 width: '50px',

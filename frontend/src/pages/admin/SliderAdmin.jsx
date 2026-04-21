@@ -69,11 +69,11 @@ const SliderAdmin = () => {
 
     try {
       const submitData = new FormData();
-      submitData.append('title', formData.title);
-      submitData.append('subtitle', formData.subtitle || '');
-      submitData.append('linkUrl', formData.linkUrl || '');
-      submitData.append('order', formData.order);
-      submitData.append('isActive', formData.isActive);
+      // Use FormData.set to avoid duplicate keys (can cause backend parsing like "0,3")
+      submitData.set('title', formData.title);
+      submitData.set('subtitle', formData.subtitle || '');
+      submitData.set('linkUrl', formData.linkUrl || '');
+      submitData.set('isActive', formData.isActive ? '1' : '0');
 
       if (formData.image) {
         submitData.append('image', formData.image);
@@ -83,10 +83,11 @@ const SliderAdmin = () => {
       }
 
       if (editingId) {
+        submitData.set('order', String(Number(formData.order) || 0));
         await sliderAPI.update(editingId, submitData);
         setMessage({ type: 'success', text: 'Slider berhasil diperbarui' });
       } else {
-        submitData.append('order', sliders.length);
+        submitData.set('order', String(sliders.length));
         await sliderAPI.create(submitData);
         setMessage({ type: 'success', text: 'Slider berhasil ditambahkan' });
       }
