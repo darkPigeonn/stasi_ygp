@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import { sliderAPI } from '../../services/api';
 import { Plus, Edit2, Trash2, Image as ImageIcon, ArrowUp, ArrowDown, Eye, EyeOff } from 'lucide-react';
 import './AdminForms.css';
+import { useAuth } from '../../context/AuthContext';
 
 const SliderAdmin = () => {
+  const { isAdmin } = useAuth();
+  const canDelete = isAdmin();
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -115,6 +118,10 @@ const SliderAdmin = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!canDelete) {
+      setMessage({ type: 'error', text: 'Hapus slider hanya bisa dilakukan oleh admin' });
+      return;
+    }
     if (!window.confirm('Apakah Anda yakin ingin menghapus slider ini?')) {
       return;
     }
@@ -125,7 +132,7 @@ const SliderAdmin = () => {
       await fetchSliders();
     } catch (error) {
       console.error('Error deleting slider:', error);
-      setMessage({ type: 'error', text: 'Gagal menghapus slider' });
+      setMessage({ type: 'error', text: 'Gagal menghapus slider: ' + error.message });
     }
   };
 
@@ -404,7 +411,9 @@ const SliderAdmin = () => {
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="btn-icon btn-delete"
-                          title="Hapus"
+                          title={canDelete ? 'Hapus' : 'Hanya admin yang bisa menghapus slider'}
+                          disabled={!canDelete}
+                          style={!canDelete ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
                         >
                           <Trash2 size={18} />
                         </button>

@@ -1323,14 +1323,13 @@ export const sliderAPI = {
 
   delete: async (id) => {
     const token = localStorage.getItem('token');
-    const url = `${BASE_URL}/slider/${id}`;
+    const url = `${API_URL}/slider/${id}`;
 
     try {
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
         },
       });
 
